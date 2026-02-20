@@ -1,0 +1,48 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Fix Add Donor Section Error",
+  "requirements": [
+    {
+      "id": "REQ-16",
+      "summary": "Debug and fix the error occurring in the Add Donor section that prevents donors from being added successfully",
+      "acceptanceCriteria": [
+        "The Add Donor dialog opens without errors",
+        "All form fields (name, blood group, phone number) accept input correctly",
+        "Form validation works properly for required fields and phone number format",
+        "Submitting the form successfully adds a donor to the backend",
+        "Success toast notification appears after successful donor addition",
+        "Error messages display appropriately for validation failures",
+        "The donor list refreshes automatically to show the newly added donor"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AddDonorDialog.tsx",
+          "operation": "modify",
+          "description": "Fix form submission handling to properly await the addDonor mutation, ensure correct BloodGroup enum value mapping from dropdown selection to backend interface format, add error boundary handling for dialog open state, validate phone number format before submission, and ensure proper form reset after successful submission"
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Fix the addDonor mutation to properly handle the backend result type which returns an object with __kind__ discriminator ('ok' or 'error'), ensure proper error extraction from the error variant, verify query invalidation triggers correctly after successful mutation, and add proper TypeScript typing for the mutation result"
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Verify that the addDonor mutation in useQueries.ts correctly handles the backend response and updates the UI state",
+      "acceptanceCriteria": [
+        "The addDonor mutation properly awaits the backend call",
+        "Query invalidation triggers after successful donor addition",
+        "Error handling captures and displays backend errors appropriately"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Ensure the addDonor mutation properly checks the __kind__ discriminator on the backend result, throws an error when __kind__ is 'error' to trigger the mutation's onError callback, invalidates the 'donors' query key on success to refresh the donor list, and properly types the mutation parameters and return value"
+        }
+      ]
+    }
+  ]
+}

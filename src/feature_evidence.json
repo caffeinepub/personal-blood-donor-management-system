@@ -1,0 +1,42 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-debug-and-fix-the-error-occurring-in-the-add-donor-section-that-prevents-donors-from-being-added-successfully",
+      "featureTitle": "Debug and fix the error occurring in the Add Donor section that prevents donors from being added successfully",
+      "files": [
+        "frontend/src/components/AddDonorDialog.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-verify-that-the-adddonor-mutation-in-usequeries-ts-correctly-handles-the-backend-response-and-updates-the-ui-state",
+      "featureTitle": "Verify that the addDonor mutation in useQueries.ts correctly handles the backend response and updates the UI state",
+      "files": [
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-17"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

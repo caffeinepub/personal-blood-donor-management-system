@@ -1,0 +1,76 @@
+{
+  "kind": "build_request",
+  "title": "Fix error in add donor section",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-16",
+      "text": "Debug and fix the error occurring in the Add Donor section that prevents donors from being added successfully",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "please fix the error accuring in add donor section"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Add Donor dialog opens without errors",
+        "All form fields (name, blood group, phone number) accept input correctly",
+        "Form validation works properly for required fields and phone number format",
+        "Submitting the form successfully adds a donor to the backend",
+        "Success toast notification appears after successful donor addition",
+        "Error messages display appropriately for validation failures",
+        "The donor list refreshes automatically to show the newly added donor"
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Verify that the addDonor mutation in useQueries.ts correctly handles the backend response and updates the UI state",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The addDonor mutation properly awaits the backend call",
+        "Query invalidation triggers after successful donor addition",
+        "Error handling captures and displays backend errors appropriately"
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "text": "Ensure the backend addDonor function in main.mo properly validates input and returns appropriate success/error responses",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend validates that all required fields (name, blood group, phone) are provided",
+        "Backend returns a clear success response when donor is added",
+        "Backend returns descriptive error messages for validation failures",
+        "Newly added donors are stored with correct default status (available, active)"
+      ]
+    }
+  ],
+  "constraints": [
+    "Maintain the existing AddDonorDialog component structure",
+    "Preserve the current form validation logic",
+    "Keep the existing backend data model for donors",
+    "Do not modify the authentication flow"
+  ],
+  "nonGoals": [
+    "Redesigning the Add Donor dialog UI",
+    "Adding new fields to the donor form",
+    "Changing the donor data model structure",
+    "Modifying other donor management features"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

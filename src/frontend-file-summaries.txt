@@ -1,0 +1,14 @@
+{
+  "frontend/src/App.tsx": "Main application component with Internet Identity authentication wrapper, login screen, and authenticated layout with header and footer including caffeine.ai attribution.",
+  "frontend/src/pages/HomePage.tsx": "Dashboard page component that organizes all donor management sections including total donor list, blood requirement form, appointed donors, temporarily rejected donors, and permanently rejected donors with add donor functionality.",
+  "frontend/src/components/DonorTable.tsx": "Table component displaying all donors with columns for name, blood group, phone number, status badges, and Call buttons that open the native phone dialer and post-call forms.",
+  "frontend/src/components/BloodRequirementForm.tsx": "Blood group selector form with dropdown for filtering donors by blood type (including \"Any Type\" option) and displaying matching results in a table with Call functionality that opens the native phone dialer.",
+  "frontend/src/components/PostCallForm.tsx": "Modal dialog form for recording post-call responses with three options (Approved, Rejected, Not Attend) and conditional fields for appointment details, rejection type, and available dates.",
+  "frontend/src/components/AppointedDonorsList.tsx": "Table component displaying appointed donors with appointment date and patient name information using blue-themed styling.",
+  "frontend/src/components/TempRejectedDonorsList.tsx": "Table component displaying temporarily rejected donors with their available dates using amber-themed styling.",
+  "frontend/src/components/PermanentRejectedDonorsList.tsx": "Table component displaying permanently rejected donors using red-themed styling.",
+  "frontend/src/components/AddDonorDialog.tsx": "Modal dialog form for adding new donors with fields for name, blood group selection, and phone number, including proper error message display from backend validation.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including fetching donors by various filters, adding donors with proper error handling for backend result discriminators, and updating donor status with automatic cache invalidation.",
+  "frontend/src/index.css": "Global styles with medical-themed OKLCH color system featuring soft emerald greens, calming teal accents, and professional healthcare-appropriate color palette for both light and dark modes.",
+  "frontend/tailwind.config.js": "Tailwind configuration extending the theme with medical color palette and maintaining existing design tokens."
+}

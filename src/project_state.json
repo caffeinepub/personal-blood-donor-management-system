@@ -1,0 +1,234 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "Personal Blood Donor Management System - A single-user website for managing blood donor data with admin-only access, donor list management, blood group filtering, call workflow with approval/rejection tracking, and automated donor status management",
+  "architectural_notes": [
+    "Single-user system with admin-only access, no public registration",
+    "Time-based auto-restoration logic for temporary rejected donors",
+    "Donor status state machine: Total → (Approved/Temp Rejected/Perm Rejected)",
+    "Blood group filtering supports 7 types plus 'Any Type' option",
+    "Call button now opens native phone dialer app using tel: protocol instead of clipboard-only"
+  ],
+  "known_issues": [
+    "Error occurring in add donor section"
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-implement-single-user-admin-authentication-using-internet-identity-with-no-public-registration-capability",
+      "title": "Implement single-user admin authentication using Internet Identity with no public registration capability",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-homepage-total-donor-list-section-displaying-all-donors-in-a-column-based-table-with-columns-for-name-blood-group-phone-number-availability-and-a-call-button-for-each-row",
+      "title": "Create homepage Total Donor List section displaying all donors in a column-based table with columns for name, blood group, phone number, availability, and a Call button for each row",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-blood-requirement-form-with-blood-group-dropdown-selector-any-type-a-a-b-b-ab-ab-o-o-that-displays-all-matching-donors-when-a-blood-group-is-selected",
+      "title": "Create Blood Requirement form with blood group dropdown selector (Any Type, A+, A-, B+, B-, AB+, AB-, O+, O-) that displays all matching donors when a blood group is selected",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-call-button-functionality-that-automatically-copies-the-donor-s-phone-number-to-clipboard-and-immediately-opens-the-post-call-response-form-without-using-any-external-calling-api",
+      "title": "Implement Call button functionality that automatically copies the donor's phone number to clipboard and immediately opens the post-call response form without using any external calling API",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-post-call-response-form-with-three-options-approved-rejected-with-sub-options-temporary-permanent-and-not-attend",
+      "title": "Create post-call response form with three options: Approved, Rejected (with sub-options Temporary/Permanent), and Not Attend",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-approved-workflow-when-approved-is-selected-prompt-for-appointment-date-and-patient-name-then-store-donor-in-appointed-donors-list-upon-submission",
+      "title": "Implement Approved workflow: when Approved is selected, prompt for appointment date and patient name, then store donor in Appointed Donors List upon submission",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-temporary-rejected-workflow-when-temporary-rejected-is-selected-prompt-for-available-date-store-donor-in-temporary-rejected-section-exclude-from-appointed-donor-list-until-available-date-then-automatically-restore-to-active-status-after-the-date-passes",
+      "title": "Implement Temporary Rejected workflow: when Temporary Rejected is selected, prompt for available date, store donor in Temporary Rejected Section, exclude from Appointed Donor list until available date, then automatically restore to active status after the date passes",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-permanent-rejected-workflow-when-permanent-rejected-is-selected-store-donor-in-permanent-rejected-section-and-permanently-exclude-from-appointed-donor-list-and-blood-group-filtering",
+      "title": "Implement Permanent Rejected workflow: when Permanent Rejected is selected, store donor in Permanent Rejected Section and permanently exclude from Appointed Donor list and blood group filtering",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-not-attend-workflow-when-not-attend-is-selected-close-the-form-without-making-any-changes-to-the-donor-s-status",
+      "title": "Implement Not Attend workflow: when Not Attend is selected, close the form without making any changes to the donor's status",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-homepage-sections-displaying-appointed-donors-list-temporary-rejected-donors-and-permanent-rejected-donors-as-separate-clearly-labeled-areas",
+      "title": "Create homepage sections displaying Appointed Donors List, Temporary Rejected Donors, and Permanent Rejected Donors as separate, clearly labeled areas",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-a-clean-professional-medical-themed-interface-with-a-calming-color-palette-soft-greens-whites-light-grays-and-clear-visual-hierarchy-that-emphasizes-data-readability-and-quick-access-to-donor-management-functions",
+      "title": "Design a clean, professional medical-themed interface with a calming color palette (soft greens, whites, light grays) and clear visual hierarchy that emphasizes data readability and quick access to donor management functions",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-the-call-button-in-donortable-component-to-use-tel-protocol-link-tel-donor-phone-that-opens-the-native-phone-dialer-app-instead-of-copying-the-phone-number-to-clipboard",
+      "title": "Modify the Call button in DonorTable component to use tel: protocol link (tel:${donor.phone}) that opens the native phone dialer app instead of copying the phone number to clipboard",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-the-call-button-in-bloodrequirementform-component-to-use-tel-protocol-link-tel-donor-phone-that-opens-the-native-phone-dialer-app-instead-of-copying-the-phone-number-to-clipboard",
+      "title": "Modify the Call button in BloodRequirementForm component to use tel: protocol link (tel:${donor.phone}) that opens the native phone dialer app instead of copying the phone number to clipboard",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-debug-and-fix-the-error-occurring-in-the-add-donor-section-that-prevents-donors-from-being-added-successfully",
+      "title": "Debug and fix the error occurring in the Add Donor section that prevents donors from being added successfully",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-verify-that-the-adddonor-mutation-in-usequeries-ts-correctly-handles-the-backend-response-and-updates-the-ui-state",
+      "title": "Verify that the addDonor mutation in useQueries.ts correctly handles the backend response and updates the UI state",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Single-user admin authentication system",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Total Donor List with table display showing name, blood group, phone, availability with Call buttons",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Blood requirement form with blood group selector showing matching donors",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Call button auto-copies phone number and opens post-call form",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Post-call Approved workflow with appointment date, patient name, and Appointed Donors List storage",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Post-call Temporary Rejected workflow with available date and auto-restoration after date",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Post-call Permanent Rejected workflow with permanent exclusion from Appointed Donor list",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Post-call Not Attend option that preserves donor status unchanged",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Homepage sections for Appointed Donors, Temporary Rejected Donors, and Permanent Rejected Donors",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Manual donor data entry and management by admin only",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Create backend data model for donors with fields: name, blood group (A+, A-, B+, B-, AB+, AB-, O+, O-), phone number, availability status, and current state (active, temporarily_rejected with available_date, permanently_rejected, appointed with appointment_date and patient_name)",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Implement backend CRUD operations for donors: add donor (admin only), update donor, delete donor, get all donors, and filter donors by blood group",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Modify Call button to automatically open native phone call app instead of just copying number",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Ensure the backend addDonor function in main.mo properly validates input and returns appropriate success/error responses",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Personal Blood Donor Management System",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
