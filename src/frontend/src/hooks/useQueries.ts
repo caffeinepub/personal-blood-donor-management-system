@@ -186,8 +186,8 @@ export function useRecordCall() {
       return await actor.recordCall(donorId);
     },
     onSuccess: () => {
+      // Invalidate all donor queries to ensure immediate refresh across all sections
       queryClient.invalidateQueries({ queryKey: ['donors'] });
-      toast.success('Call recorded successfully');
     },
     onError: (error) => {
       toast.error('Failed to record call', {

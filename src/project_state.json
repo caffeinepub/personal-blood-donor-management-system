@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 13,
+  "projectStateVersion": 15,
   "summary": "Personal Blood Donor Management System - A single-user website for managing blood donor data with admin-only access, donor list management with edit/delete capabilities, blood group filtering, call workflow with approval/rejection tracking, automated donor status management, donation tracking with 3-month cooldown periods, and rejection reason capture",
   "architectural_notes": [
     "Single-user system with admin-only access, no public registration",
@@ -12,7 +12,7 @@
     "Rejection reasons captured as free-text input for both temporary and permanent rejections",
     "Admin can edit/delete donor records after creation",
     "Donor call tracking: Call Count (number) and Last Called Date (timestamp) fields track contact history",
-    "Donor list sorting: Primary sort by Last Called Date (oldest first), secondary sort by Call Count (lowest first)"
+    "Appointed Donors section: Primary sort by Last Called Date (oldest/null first), secondary sort by Call Count (lowest first)"
   ],
   "known_issues": [],
   "isFixRequest": false,
@@ -264,6 +264,62 @@
         "REQ-37"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-reverse-the-sorting-logic-in-appointeddonorslist-tsx-so-that-donors-who-were-not-called-recently-appear-at-the-top-and-donors-who-were-called-most-recently-appear-at-the-bottom-descending-lastcalleddate-with-nulls-first",
+      "title": "Reverse the sorting logic in AppointedDonorsList.tsx so that donors who were NOT called recently appear at the TOP and donors who were called most recently appear at the BOTTOM (descending lastCalledDate with nulls first)",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-maintain-secondary-sorting-by-call-count-ascending-lowest-first-in-appointeddonorslist-tsx-when-two-donors-have-the-same-last-called-date",
+      "title": "Maintain secondary sorting by Call Count (ascending, lowest first) in AppointedDonorsList.tsx when two donors have the same Last Called Date",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-appointed-donors-list-automatically-updates-and-refreshes-instantly-after-the-call-button-is-clicked-to-reflect-the-new-sorting-order",
+      "title": "Ensure the Appointed Donors list automatically updates and refreshes instantly after the Call button is clicked to reflect the new sorting order",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-calls-column-to-the-total-donor-list-section-donortable-tsx-displaying-the-callcount-value-for-each-donor",
+      "title": "Add a 'Calls' column to the Total Donor List section (DonorTable.tsx) displaying the callCount value for each donor",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-alphabetical-sorting-by-donor-name-as-the-primary-sort-in-donortable-tsx-total-donor-list-section",
+      "title": "Implement alphabetical sorting by donor name as the primary sort in DonorTable.tsx (Total Donor List section)",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-secondary-sorting-by-blood-group-in-donortable-tsx-total-donor-list-section-when-donor-names-are-identical",
+      "title": "Implement secondary sorting by blood group in DonorTable.tsx (Total Donor List section) when donor names are identical",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-recent-call-sorting-logic-last-called-date-descending-call-count-ascending-applies-only-to-the-appointed-donors-section-and-not-to-the-total-donor-list-section",
+      "title": "Ensure the recent call sorting logic (Last Called Date descending, Call Count ascending) applies ONLY to the Appointed Donors section and not to the Total Donor List section",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -450,6 +506,30 @@
     {
       "id": "AR-32",
       "summary": "Refactor homepage to show section links/buttons instead of inline content. Only display section details (Total Donor List, Appointed Donors, Temporary Rejected, Permanent Rejected) after the user clicks on a section link",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Display Call Count column in both Total Donor List and Appointed Donors sections",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-34",
+      "summary": "Implement sorting logic for Appointed Donors section: sort by Last Called Date (ascending, nulls/oldest first), secondary sort by Call Count (ascending) when dates match",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Auto-refresh Appointed Donors section immediately after Call button is clicked to reflect updated sorting",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Implement alphabetical sorting by donor name for Total Donor List section (primary sort), with secondary sort by blood group",
       "reqIds": [],
       "status": "pending"
     }

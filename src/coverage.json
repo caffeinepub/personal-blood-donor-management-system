@@ -1,57 +1,93 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-22T01:26:57.997Z",
+  "generatedAt": "2026-02-22T01:47:53.146Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
-    "implemented": 4,
+    "total": 7,
+    "implemented": 7,
     "items": [
       {
-        "id": "REQ-34",
-        "summary": "Refactor frontend/src/pages/HomePage.tsx to display a navigation menu or list of section links/buttons instead of rendering all donor sections inline on the homepage",
+        "id": "REQ-38",
+        "summary": "Reverse the sorting logic in AppointedDonorsList.tsx so that donors who were NOT called recently appear at the TOP and donors who were called most recently appear at the BOTTOM (descending lastCalledDate with nulls first)",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/AppointedDonorsList.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/AppointedDonorsList.tsx"
         ]
       },
       {
-        "id": "REQ-35",
-        "summary": "Implement section navigation state management in HomePage.tsx that tracks which section is currently active and displays only that section's content when clicked",
+        "id": "REQ-39",
+        "summary": "Maintain secondary sorting by Call Count (ascending, lowest first) in AppointedDonorsList.tsx when two donors have the same Last Called Date",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/AppointedDonorsList.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/AppointedDonorsList.tsx"
         ]
       },
       {
-        "id": "REQ-36",
-        "summary": "Add a back or home button that returns the user from a section detail view to the main section navigation menu",
+        "id": "REQ-40",
+        "summary": "Ensure the Appointed Donors list automatically updates and refreshes instantly after the Call button is clicked to reflect the new sorting order",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/BloodRequirementForm.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
-        "id": "REQ-37",
-        "summary": "Preserve the Add Donor functionality and make it accessible from either the section navigation menu or the Total Donor List section view",
+        "id": "REQ-41",
+        "summary": "Add a 'Calls' column to the Total Donor List section (DonorTable.tsx) displaying the callCount value for each donor",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/DonorTable.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/DonorTable.tsx"
+        ]
+      },
+      {
+        "id": "REQ-42",
+        "summary": "Implement alphabetical sorting by donor name as the primary sort in DonorTable.tsx (Total Donor List section)",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/DonorTable.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/DonorTable.tsx"
+        ]
+      },
+      {
+        "id": "REQ-43",
+        "summary": "Implement secondary sorting by blood group in DonorTable.tsx (Total Donor List section) when donor names are identical",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/DonorTable.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/DonorTable.tsx"
+        ]
+      },
+      {
+        "id": "REQ-44",
+        "summary": "Ensure the recent call sorting logic (Last Called Date descending, Call Count ascending) applies ONLY to the Appointed Donors section and not to the Total Donor List section",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/DonorTable.tsx",
+          "frontend/src/components/AppointedDonorsList.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/DonorTable.tsx",
+          "frontend/src/components/AppointedDonorsList.tsx"
         ]
       }
     ]
@@ -61,7 +97,9 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/components/AppointedDonorsList.tsx",
+    "frontend/src/components/DonorTable.tsx",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

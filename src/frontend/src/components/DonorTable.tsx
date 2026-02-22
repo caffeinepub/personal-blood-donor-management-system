@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useGetAllDonors, useRecordCall } from '../hooks/useQueries';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Button } from './ui/button';
@@ -17,6 +17,37 @@ export default function DonorTable() {
   const [editingDonor, setEditingDonor] = useState<Donor | null>(null);
   const [deletingDonor, setDeletingDonor] = useState<Donor | null>(null);
   const [callingDonorId, setCallingDonorId] = useState<bigint | null>(null);
+
+  // Sort donors alphabetically by name, then by blood group
+  const sortedDonors = useMemo(() => {
+    if (!donors) return [];
+
+    // Define blood group order
+    const bloodGroupOrder: Record<string, number> = {
+      A_pos: 1,
+      A_neg: 2,
+      B_pos: 3,
+      B_neg: 4,
+      AB_pos: 5,
+      AB_neg: 6,
+      O_pos: 7,
+      O_neg: 8,
+    };
+
+    return [...donors].sort((a, b) => {
+      // Primary sort: alphabetical by name (case-insensitive)
+      const nameComparison = a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+      
+      if (nameComparison !== 0) {
+        return nameComparison;
+      }
+      
+      // Secondary sort: by blood group when names are identical
+      const bloodGroupA = bloodGroupOrder[a.bloodGroup] || 999;
+      const bloodGroupB = bloodGroupOrder[b.bloodGroup] || 999;
+      return bloodGroupA - bloodGroupB;
+    });
+  }, [donors]);
 
   const handleCall = (donor: Donor) => {
     setCallingDonorId(donor.id);
@@ -74,7 +105,7 @@ export default function DonorTable() {
     );
   }
 
-  if (!donors || donors.length === 0) {
+  if (!sortedDonors || sortedDonors.length === 0) {
     return (
       <div className="rounded-lg border border-emerald-200 bg-white p-12 text-center">
         <p className="text-muted-foreground">No donors found. Add your first donor to get started.</p>
@@ -91,12 +122,13 @@ export default function DonorTable() {
               <TableHead className="font-semibold text-gray-900">Name</TableHead>
               <TableHead className="font-semibold text-gray-900">Blood Group</TableHead>
               <TableHead className="font-semibold text-gray-900">Phone Number</TableHead>
+              <TableHead className="font-semibold text-gray-900">Calls</TableHead>
               <TableHead className="font-semibold text-gray-900">Status</TableHead>
               <TableHead className="font-semibold text-gray-900">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {donors.map((donor) => (
+            {sortedDonors.map((donor) => (
               <TableRow key={donor.id.toString()} className="hover:bg-emerald-50/50">
                 <TableCell className="font-medium">{donor.name}</TableCell>
                 <TableCell>
@@ -105,6 +137,7 @@ export default function DonorTable() {
                   </Badge>
                 </TableCell>
                 <TableCell className="font-mono text-sm">{donor.phoneNumber}</TableCell>
+                <TableCell className="font-medium">{donor.callCount.toString()}</TableCell>
                 <TableCell>{getStatusBadge(donor.status)}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">

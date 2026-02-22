@@ -1,12 +1,14 @@
 # Specification
 
 ## Summary
-**Goal:** Convert the homepage from displaying all donor sections inline to a navigation-based layout where sections are accessed individually through clickable links.
+**Goal:** Fix donor sorting logic in the Appointed Donors section and add Call Count tracking to the Total Donor List.
 
 **Planned changes:**
-- Replace inline donor sections on homepage with a navigation menu showing section links/buttons
-- Implement section navigation state to display only the selected section's content when clicked
-- Add a back/home button to return from section details to the main navigation menu
-- Preserve Add Donor functionality and make it accessible from the section menu or Total Donor List view
+- Reverse sorting in Appointed Donors list so donors NOT called recently appear at the TOP (nulls first, then descending lastCalledDate)
+- Add secondary sorting by Call Count (ascending) when lastCalledDate values match in Appointed Donors
+- Ensure Appointed Donors list refreshes automatically after Call button is clicked
+- Add "Calls" column to Total Donor List displaying callCount for each donor
+- Sort Total Donor List alphabetically by name (primary) and by blood group (secondary)
+- Keep call-based sorting logic exclusive to Appointed Donors section only
 
-**User-visible outcome:** Users will see a clean homepage with section navigation buttons. After clicking a section (Total Donor List, Blood Requirement, Appointed Donors, Temporary Rejected Donors, or Permanent Rejected Donors), only that section's details appear. A back button allows returning to the section menu.
+**User-visible outcome:** Users will see donors who haven't been called recently at the top of the Appointed Donors list, with automatic refresh after clicking Call. The Total Donor List will display call counts and be sorted alphabetically by name.

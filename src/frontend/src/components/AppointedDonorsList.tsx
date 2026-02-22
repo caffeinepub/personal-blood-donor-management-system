@@ -12,29 +12,29 @@ export default function AppointedDonorsList() {
   const { mutate: markAsDonated, isPending: isDonatedPending } = useMarkDonorAsDonated();
   const { mutate: markAsNotDonated, isPending: isNotDonatedPending } = useMarkDonorAsNotDonated();
 
-  // Sort donors by lastCalledDate (ascending, nulls first) and then by callCount (ascending)
+  // Sort donors: nulls first, then by lastCalledDate descending (oldest first, most recent last), then by callCount ascending
   const sortedDonors = useMemo(() => {
     if (!donors) return [];
     
     return [...donors].sort((a, b) => {
-      // Handle null lastCalledDate - nulls should appear first
+      // Handle null lastCalledDate - nulls should appear first (donors NOT called recently)
       if (a.lastCalledDate === undefined && b.lastCalledDate === undefined) {
-        // Both null, sort by callCount
+        // Both null, sort by callCount (lower first)
         return Number(a.callCount) - Number(b.callCount);
       }
-      if (a.lastCalledDate === undefined) return -1; // a comes first
-      if (b.lastCalledDate === undefined) return 1;  // b comes first
+      if (a.lastCalledDate === undefined) return -1; // a comes first (not called)
+      if (b.lastCalledDate === undefined) return 1;  // b comes first (not called)
       
-      // Both have lastCalledDate, compare them
+      // Both have lastCalledDate, compare them in DESCENDING order (oldest dates first, most recent last)
       const dateA = Number(a.lastCalledDate);
       const dateB = Number(b.lastCalledDate);
       
       if (dateA === dateB) {
-        // Same date, sort by callCount
+        // Same date, sort by callCount (lower first)
         return Number(a.callCount) - Number(b.callCount);
       }
       
-      // Different dates, sort ascending (oldest first)
+      // Different dates, sort DESCENDING (older dates have smaller timestamps, so they come first)
       return dateA - dateB;
     });
   }, [donors]);

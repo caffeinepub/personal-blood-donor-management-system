@@ -1,87 +1,143 @@
 {
   "kind": "build_request",
-  "title": "Convert homepage to navigation-based layout with separate section views",
-  "projectName": "Blood Donor Management",
-  "priority": "normal",
+  "title": "Fix donor sorting logic and add Call Count to Total Donor List",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-34",
-      "text": "Refactor frontend/src/pages/HomePage.tsx to display a navigation menu or list of section links/buttons instead of rendering all donor sections inline on the homepage",
+      "id": "REQ-38",
+      "text": "Reverse the sorting logic in AppointedDonorsList.tsx so that donors who were NOT called recently appear at the TOP and donors who were called most recently appear at the BOTTOM (descending lastCalledDate with nulls first)",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-user-final"
         ],
         "quotes": [
-          "make the home has sections sfter clicking the section then only i need to acces the section details"
+          "Donors who were NOT called recently should appear at the TOP. Donors who were called most recently should appear at the BOTTOM."
         ]
       },
       "acceptanceCriteria": [
-        "Homepage displays clickable section links or buttons for: Total Donor List, Blood Requirement, Appointed Donors, Temporary Rejected Donors, and Permanent Rejected Donors",
-        "No donor tables or section details are visible on the initial homepage load",
-        "Each section link is clearly labeled and styled consistently with the medical theme"
+        "Donors with no lastCalledDate (null) appear first",
+        "Donors with older lastCalledDate values appear before donors with newer values",
+        "The sorting order is descending by lastCalledDate timestamp"
       ]
     },
     {
-      "id": "REQ-35",
-      "text": "Implement section navigation state management in HomePage.tsx that tracks which section is currently active and displays only that section's content when clicked",
+      "id": "REQ-39",
+      "text": "Maintain secondary sorting by Call Count (ascending, lowest first) in AppointedDonorsList.tsx when two donors have the same Last Called Date",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-user-final"
         ],
         "quotes": [
-          "aafter i clicked the section then only i want see the details in the section"
+          "If two donors have the same last called date, then sort them by lower Call Count first."
         ]
       },
       "acceptanceCriteria": [
-        "Clicking a section link/button reveals that section's full content (donors table, forms, etc.)",
-        "Only one section's details are visible at a time",
-        "User can navigate back to the section menu or switch between sections without page reload"
+        "When lastCalledDate values match, donors with lower callCount appear first",
+        "Secondary sort applies correctly across all date groups"
       ]
     },
     {
-      "id": "REQ-36",
-      "text": "Add a back or home button that returns the user from a section detail view to the main section navigation menu",
+      "id": "REQ-40",
+      "text": "Ensure the Appointed Donors list automatically updates and refreshes instantly after the Call button is clicked to reflect the new sorting order",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-user-final"
+        ],
+        "quotes": [
+          "This sorting must update automatically whenever 'call' is clicked. The donor list should refresh instantly after the update."
         ]
       },
       "acceptanceCriteria": [
-        "A clearly visible back/home button is present when viewing any section detail",
-        "Clicking the button returns to the section navigation menu",
-        "The navigation state resets so no section details are visible after returning"
+        "React Query invalidation triggers immediate refetch after recordCall mutation",
+        "UI updates without manual refresh or page reload",
+        "Sorting reflects the updated lastCalledDate and callCount immediately"
       ]
     },
     {
-      "id": "REQ-37",
-      "text": "Preserve the Add Donor functionality and make it accessible from either the section navigation menu or the Total Donor List section view",
+      "id": "REQ-41",
+      "text": "Add a 'Calls' column to the Total Donor List section (DonorTable.tsx) displaying the callCount value for each donor",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-user-final"
+        ],
+        "quotes": [
+          "call count mention in both total donor section and appoint donors section"
         ]
       },
       "acceptanceCriteria": [
-        "Add Donor button remains functional and accessible",
-        "AddDonorDialog continues to work as currently implemented",
-        "After adding a donor, user can see the updated list in the Total Donor List section"
+        "Call Count column is visible in DonorTable component",
+        "Column displays the numeric callCount value for each donor",
+        "Column header is labeled 'Calls' or 'Call Count'"
+      ]
+    },
+    {
+      "id": "REQ-42",
+      "text": "Implement alphabetical sorting by donor name as the primary sort in DonorTable.tsx (Total Donor List section)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-final"
+        ],
+        "quotes": [
+          "total donor section list should be in alphabetic order and same blood order"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Donors are sorted alphabetically by name (A-Z)",
+        "Sorting is case-insensitive",
+        "Alphabetical order is the primary sort criterion"
+      ]
+    },
+    {
+      "id": "REQ-43",
+      "text": "Implement secondary sorting by blood group in DonorTable.tsx (Total Donor List section) when donor names are identical",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-final"
+        ],
+        "quotes": [
+          "total donor section list should be in alphabetic order and same blood order"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When names match, donors are sorted by blood group",
+        "Blood group sort order follows standard grouping (e.g., A+, A-, B+, B-, AB+, AB-, O+, O-)",
+        "Secondary sort only applies when primary sort values are equal"
+      ]
+    },
+    {
+      "id": "REQ-44",
+      "text": "Ensure the recent call sorting logic (Last Called Date descending, Call Count ascending) applies ONLY to the Appointed Donors section and not to the Total Donor List section",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-final"
+        ],
+        "quotes": [
+          "recent call logic only on appoint donor section"
+        ]
+      },
+      "acceptanceCriteria": [
+        "AppointedDonorsList.tsx uses lastCalledDate and callCount for sorting",
+        "DonorTable.tsx uses name and blood group for sorting",
+        "No call-based sorting logic appears in DonorTable.tsx"
       ]
     }
   ],
   "constraints": [
-    "Do not modify backend logic or data structures",
-    "Preserve all existing donor management functionality (add, edit, delete, call tracking)",
-    "Maintain the medical-themed design and color palette",
-    "Keep all existing components (DonorTable, AppointedDonorsList, TempRejectedDonorsList, PermanentRejectedDonorsList, BloodRequirementForm) functional"
+    "Do not modify the backend schema or add new fields to the Donor type",
+    "Preserve existing Call button functionality that records calls before opening the phone dialer",
+    "Maintain existing React Query invalidation patterns for real-time updates"
   ],
   "nonGoals": [
-    "Creating a multi-page application with routing",
-    "Adding new donor fields or backend functions",
-    "Modifying authentication or Internet Identity logic",
-    "Changing the existing sorting or call tracking behavior"
+    "Adding Call Count column to Blood Requirement results or other sections not mentioned",
+    "Changing the sorting behavior in Temporary Rejected or Permanent Rejected sections",
+    "Modifying the backend recordCall function logic"
   ],
   "imageRequirements": {
     "required": [],

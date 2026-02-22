@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-refactor-frontend-src-pages-homepage-tsx-to-display-a-navigation-menu-or-list-of-section-links-buttons-instead-of-rendering-all-donor-sections-inline-on-the-homepage",
-      "featureTitle": "Refactor frontend/src/pages/HomePage.tsx to display a navigation menu or list of section links/buttons instead of rendering all donor sections inline on the homepage",
+      "featureId": "feature-reverse-the-sorting-logic-in-appointeddonorslist-tsx-so-that-donors-who-were-not-called-recently-appear-at-the-top-and-donors-who-were-called-most-recently-appear-at-the-bottom-descending-lastcalleddate-with-nulls-first",
+      "featureTitle": "Reverse the sorting logic in AppointedDonorsList.tsx so that donors who were NOT called recently appear at the TOP and donors who were called most recently appear at the BOTTOM (descending lastCalledDate with nulls first)",
       "files": [
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/components/AppointedDonorsList.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -15,15 +15,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-34"
+        "REQ-38"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-section-navigation-state-management-in-homepage-tsx-that-tracks-which-section-is-currently-active-and-displays-only-that-section-s-content-when-clicked",
-      "featureTitle": "Implement section navigation state management in HomePage.tsx that tracks which section is currently active and displays only that section's content when clicked",
+      "featureId": "feature-maintain-secondary-sorting-by-call-count-ascending-lowest-first-in-appointeddonorslist-tsx-when-two-donors-have-the-same-last-called-date",
+      "featureTitle": "Maintain secondary sorting by Call Count (ascending, lowest first) in AppointedDonorsList.tsx when two donors have the same Last Called Date",
       "files": [
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/components/AppointedDonorsList.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -33,15 +33,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-35"
+        "REQ-39"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-back-or-home-button-that-returns-the-user-from-a-section-detail-view-to-the-main-section-navigation-menu",
-      "featureTitle": "Add a back or home button that returns the user from a section detail view to the main section navigation menu",
+      "featureId": "feature-ensure-the-appointed-donors-list-automatically-updates-and-refreshes-instantly-after-the-call-button-is-clicked-to-reflect-the-new-sorting-order",
+      "featureTitle": "Ensure the Appointed Donors list automatically updates and refreshes instantly after the Call button is clicked to reflect the new sorting order",
       "files": [
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -51,15 +51,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-36"
+        "REQ-40"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-preserve-the-add-donor-functionality-and-make-it-accessible-from-either-the-section-navigation-menu-or-the-total-donor-list-section-view",
-      "featureTitle": "Preserve the Add Donor functionality and make it accessible from either the section navigation menu or the Total Donor List section view",
+      "featureId": "feature-add-a-calls-column-to-the-total-donor-list-section-donortable-tsx-displaying-the-callcount-value-for-each-donor",
+      "featureTitle": "Add a 'Calls' column to the Total Donor List section (DonorTable.tsx) displaying the callCount value for each donor",
       "files": [
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/components/DonorTable.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -69,7 +69,62 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-37"
+        "REQ-41"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-alphabetical-sorting-by-donor-name-as-the-primary-sort-in-donortable-tsx-total-donor-list-section",
+      "featureTitle": "Implement alphabetical sorting by donor name as the primary sort in DonorTable.tsx (Total Donor List section)",
+      "files": [
+        "frontend/src/components/DonorTable.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-42"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-secondary-sorting-by-blood-group-in-donortable-tsx-total-donor-list-section-when-donor-names-are-identical",
+      "featureTitle": "Implement secondary sorting by blood group in DonorTable.tsx (Total Donor List section) when donor names are identical",
+      "files": [
+        "frontend/src/components/DonorTable.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-43"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-the-recent-call-sorting-logic-last-called-date-descending-call-count-ascending-applies-only-to-the-appointed-donors-section-and-not-to-the-total-donor-list-section",
+      "featureTitle": "Ensure the recent call sorting logic (Last Called Date descending, Call Count ascending) applies ONLY to the Appointed Donors section and not to the Total Donor List section",
+      "files": [
+        "frontend/src/components/AppointedDonorsList.tsx",
+        "frontend/src/components/DonorTable.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-44"
       ],
       "confidence": "high"
     }

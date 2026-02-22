@@ -1,14 +1,33 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-22T01:26:57.994Z",
-  "summary": "The diff implements a navigation-based layout with section state management, back button, and preserved Add Donor functionality as requested. All four requirements (REQ-34, REQ-35, REQ-36, REQ-37) appear to be implemented based on the visible changes to HomePage.tsx.",
-  "missing_requirements": [],
+  "generatedAt": "2026-02-22T01:47:53.142Z",
+  "summary": "The diff implements most of the requested functionality for donor sorting logic and Call Count column addition. The AppointedDonorsList.tsx correctly implements reversed sorting with nulls first and secondary call count sorting. The DonorTable.tsx implements alphabetical name sorting with secondary blood group sorting and adds a 'Calls' column. React Query invalidation is present in useQueries.ts. However, the diff is truncated, preventing full verification of the Call Count column implementation and complete UI rendering details.",
+  "missing_requirements": [
+    {
+      "id": "REQ-40",
+      "requirement": "Ensure the Appointed Donors list automatically updates and refreshes instantly after the Call button is clicked to reflect the new sorting order",
+      "reason": "While recordCall mutation in useQueries.ts invalidates donor queries, the AppointedDonorsList.tsx file is truncated and does not show the Call button implementation. Cannot verify that Call button triggers recordCall mutation and subsequent invalidation.",
+      "evidence": [
+        "frontend/src/components/AppointedDonorsList.tsx"
+      ]
+    },
+    {
+      "id": "REQ-41",
+      "requirement": "Add a 'Calls' column to the Total Donor List section (DonorTable.tsx) displaying the callCount value for each donor",
+      "reason": "DonorTable.tsx is truncated before the table rendering section. While sorting logic includes callCount handling and file summary confirms 'call count' column exists, the actual TableHeader and TableCell implementation showing the Calls column is not visible in the diff.",
+      "evidence": [
+        "frontend/src/components/DonorTable.tsx"
+      ]
+    }
+  ],
   "hallucinated_features": [],
-  "confidence": 0.85,
+  "confidence": 0.75,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/components/AppointedDonorsList.tsx",
+    "frontend/src/components/DonorTable.tsx",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json"
   ]
 }
