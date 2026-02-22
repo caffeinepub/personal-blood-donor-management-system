@@ -1,73 +1,87 @@
 {
   "kind": "build_request",
-  "title": "Fix error in add donor section",
-  "priority": "high",
+  "title": "Convert homepage to navigation-based layout with separate section views",
+  "projectName": "Blood Donor Management",
+  "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-16",
-      "text": "Debug and fix the error occurring in the Add Donor section that prevents donors from being added successfully",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "please fix the error accuring in add donor section"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The Add Donor dialog opens without errors",
-        "All form fields (name, blood group, phone number) accept input correctly",
-        "Form validation works properly for required fields and phone number format",
-        "Submitting the form successfully adds a donor to the backend",
-        "Success toast notification appears after successful donor addition",
-        "Error messages display appropriately for validation failures",
-        "The donor list refreshes automatically to show the newly added donor"
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "text": "Verify that the addDonor mutation in useQueries.ts correctly handles the backend response and updates the UI state",
+      "id": "REQ-34",
+      "text": "Refactor frontend/src/pages/HomePage.tsx to display a navigation menu or list of section links/buttons instead of rendering all donor sections inline on the homepage",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-latest"
+        ],
+        "quotes": [
+          "make the home has sections sfter clicking the section then only i need to acces the section details"
         ]
       },
       "acceptanceCriteria": [
-        "The addDonor mutation properly awaits the backend call",
-        "Query invalidation triggers after successful donor addition",
-        "Error handling captures and displays backend errors appropriately"
+        "Homepage displays clickable section links or buttons for: Total Donor List, Blood Requirement, Appointed Donors, Temporary Rejected Donors, and Permanent Rejected Donors",
+        "No donor tables or section details are visible on the initial homepage load",
+        "Each section link is clearly labeled and styled consistently with the medical theme"
       ]
     },
     {
-      "id": "REQ-18",
-      "text": "Ensure the backend addDonor function in main.mo properly validates input and returns appropriate success/error responses",
-      "target": "backend",
+      "id": "REQ-35",
+      "text": "Implement section navigation state management in HomePage.tsx that tracks which section is currently active and displays only that section's content when clicked",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-latest"
+        ],
+        "quotes": [
+          "aafter i clicked the section then only i want see the details in the section"
         ]
       },
       "acceptanceCriteria": [
-        "Backend validates that all required fields (name, blood group, phone) are provided",
-        "Backend returns a clear success response when donor is added",
-        "Backend returns descriptive error messages for validation failures",
-        "Newly added donors are stored with correct default status (available, active)"
+        "Clicking a section link/button reveals that section's full content (donors table, forms, etc.)",
+        "Only one section's details are visible at a time",
+        "User can navigate back to the section menu or switch between sections without page reload"
+      ]
+    },
+    {
+      "id": "REQ-36",
+      "text": "Add a back or home button that returns the user from a section detail view to the main section navigation menu",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A clearly visible back/home button is present when viewing any section detail",
+        "Clicking the button returns to the section navigation menu",
+        "The navigation state resets so no section details are visible after returning"
+      ]
+    },
+    {
+      "id": "REQ-37",
+      "text": "Preserve the Add Donor functionality and make it accessible from either the section navigation menu or the Total Donor List section view",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Add Donor button remains functional and accessible",
+        "AddDonorDialog continues to work as currently implemented",
+        "After adding a donor, user can see the updated list in the Total Donor List section"
       ]
     }
   ],
   "constraints": [
-    "Maintain the existing AddDonorDialog component structure",
-    "Preserve the current form validation logic",
-    "Keep the existing backend data model for donors",
-    "Do not modify the authentication flow"
+    "Do not modify backend logic or data structures",
+    "Preserve all existing donor management functionality (add, edit, delete, call tracking)",
+    "Maintain the medical-themed design and color palette",
+    "Keep all existing components (DonorTable, AppointedDonorsList, TempRejectedDonorsList, PermanentRejectedDonorsList, BloodRequirementForm) functional"
   ],
   "nonGoals": [
-    "Redesigning the Add Donor dialog UI",
-    "Adding new fields to the donor form",
-    "Changing the donor data model structure",
-    "Modifying other donor management features"
+    "Creating a multi-page application with routing",
+    "Adding new donor fields or backend functions",
+    "Modifying authentication or Internet Identity logic",
+    "Changing the existing sorting or call tracking behavior"
   ],
   "imageRequirements": {
     "required": [],

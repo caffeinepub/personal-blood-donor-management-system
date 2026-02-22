@@ -22,8 +22,10 @@ export interface Donor {
   'id' : bigint,
   'status' : DonorStatus,
   'name' : string,
+  'lastCalledDate' : [] | [bigint],
   'bloodGroup' : BloodGroup,
   'phoneNumber' : string,
+  'callCount' : bigint,
 }
 export type DonorStatus = { 'active' : null } |
   { 'permanentlyRejected' : null } |
@@ -31,22 +33,19 @@ export type DonorStatus = { 'active' : null } |
   { 'temporarilyRejected' : { 'availableDate' : Time } };
 export type Time = bigint;
 export interface _SERVICE {
-  'addDonor' : ActorMethod<
-    [string, BloodGroup, string],
-    { 'ok' : bigint } |
-      { 'error' : string }
-  >,
+  'addDonor' : ActorMethod<[string, BloodGroup, string], bigint>,
+  'deleteDonor' : ActorMethod<[bigint], undefined>,
+  'editDonor' : ActorMethod<[bigint, string, BloodGroup, string], undefined>,
   'getAllAppointedDonors' : ActorMethod<[], Array<Donor>>,
   'getAllDonors' : ActorMethod<[], Array<Donor>>,
   'getAllPermanentlyRejectedDonors' : ActorMethod<[], Array<Donor>>,
   'getAllTempRejectedDonors' : ActorMethod<[], Array<Donor>>,
-  'getDonor' : ActorMethod<[bigint], { 'ok' : Donor } | { 'error' : string }>,
+  'getDonor' : ActorMethod<[bigint], Donor>,
   'getDonorsByBloodGroup' : ActorMethod<[BloodGroup], Array<Donor>>,
-  'updateDonorStatus' : ActorMethod<
-    [bigint, DonorStatus],
-    { 'ok' : null } |
-      { 'error' : string }
-  >,
+  'markDonorAsDonated' : ActorMethod<[bigint], undefined>,
+  'markDonorAsNotDonated' : ActorMethod<[bigint], undefined>,
+  'recordCall' : ActorMethod<[bigint], undefined>,
+  'updateDonorStatus' : ActorMethod<[bigint, DonorStatus], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

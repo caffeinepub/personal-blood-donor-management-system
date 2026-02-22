@@ -1,10 +1,12 @@
 import Map "mo:core/Map";
 import Text "mo:core/Text";
 import Order "mo:core/Order";
-import Array "mo:core/Array";
 import Time "mo:core/Time";
+import Array "mo:core/Array";
 import Runtime "mo:core/Runtime";
 import Iter "mo:core/Iter";
+
+
 
 actor {
   public type BloodGroup = {
@@ -34,6 +36,8 @@ actor {
     bloodGroup : BloodGroup;
     phoneNumber : Text;
     status : DonorStatus;
+    callCount : Int;
+    lastCalledDate : ?Int;
   };
 
   module Donor {
@@ -45,13 +49,10 @@ actor {
   let donors = Map.empty<Nat, Donor>();
   var nextId = 0;
 
-  public shared ({ caller }) func addDonor(name : Text, bloodGroup : BloodGroup, phoneNumber : Text) : async {
-    #ok : Nat;
-    #error : Text;
-  } {
+  public shared ({ caller }) func addDonor(name : Text, bloodGroup : BloodGroup, phoneNumber : Text) : async Nat {
     // Input validation
     if (name.size() == 0) {
-      return #error("Name cannot be empty");
+      Runtime.trap("Name cannot be empty");
     };
 
     // Check if phone number is unique
@@ -61,7 +62,7 @@ actor {
       }
     );
     switch (existingDonor) {
-      case (?_) { return #error("Phone number already exists") };
+      case (?_) { Runtime.trap("Phone number already exists") };
       case (null) {};
     };
 
@@ -71,19 +72,18 @@ actor {
       bloodGroup;
       phoneNumber;
       status = #active;
+      callCount = 0;
+      lastCalledDate = null;
     };
     donors.add(nextId, donor);
     let currentId = nextId;
     nextId += 1;
-    #ok currentId;
+    currentId;
   };
 
-  public shared ({ caller }) func updateDonorStatus(donorId : Nat, newStatus : DonorStatus) : async {
-    #ok : ();
-    #error : Text;
-  } {
+  public shared ({ caller }) func updateDonorStatus(donorId : Nat, newStatus : DonorStatus) : async () {
     let existingDonor = switch (donors.get(donorId)) {
-      case (null) { return #error("Donor not found") };
+      case (null) { Runtime.trap("Donor not found") };
       case (?donor) { donor };
     };
 
@@ -93,9 +93,115 @@ actor {
       bloodGroup = existingDonor.bloodGroup;
       phoneNumber = existingDonor.phoneNumber;
       status = newStatus;
+      callCount = existingDonor.callCount;
+      lastCalledDate = existingDonor.lastCalledDate;
     };
     donors.add(donorId, updatedDonor);
-    #ok();
+  };
+
+  // New: Edit donor details
+  public shared ({ caller }) func editDonor(id : Nat, newName : Text, newBloodGroup : BloodGroup, newPhoneNumber : Text) : async () {
+    if (newName.size() == 0) {
+      Runtime.trap("Name cannot be empty");
+    };
+
+    let existingDonor = switch (donors.get(id)) {
+      case (null) { Runtime.trap("Donor not found") };
+      case (?donor) { donor };
+    };
+
+    // Check if new phone number is unique (excluding current donor)
+    if (existingDonor.phoneNumber != newPhoneNumber) {
+      let duplicate = donors.values().find(
+        func(donor) { donor.phoneNumber == newPhoneNumber }
+      );
+      if (duplicate != null) {
+        Runtime.trap("Phone number already exists");
+      };
+    };
+
+    let updatedDonor : Donor = {
+      id = existingDonor.id;
+      name = newName;
+      bloodGroup = newBloodGroup;
+      phoneNumber = newPhoneNumber;
+      status = existingDonor.status;
+      callCount = existingDonor.callCount;
+      lastCalledDate = existingDonor.lastCalledDate;
+    };
+    donors.add(id, updatedDonor);
+  };
+
+  // New: Delete donor
+  public shared ({ caller }) func deleteDonor(id : Nat) : async () {
+    ignore switch (donors.get(id)) {
+      case (null) { Runtime.trap("Donor not found") };
+      case (_) { true };
+    };
+    donors.remove(id);
+  };
+
+  // New: Mark donor as donated with 3 month cooldown
+  public shared ({ caller }) func markDonorAsDonated(donorId : Nat) : async () {
+    let existingDonor = switch (donors.get(donorId)) {
+      case (null) { Runtime.trap("Donor not found") };
+      case (?donor) { donor };
+    };
+
+    // Calculate 3 months from now (in nanoseconds, for simulated time)
+    let currentTime = Time.now();
+    let threeMonthsInNanos = 3 * 30 * 24 * 60 * 60 * 1000000000; // 3 months in ns
+
+    let updatedDonor : Donor = {
+      id = existingDonor.id;
+      name = existingDonor.name;
+      bloodGroup = existingDonor.bloodGroup;
+      phoneNumber = existingDonor.phoneNumber;
+      status = #temporarilyRejected {
+        availableDate = currentTime + threeMonthsInNanos;
+      };
+      callCount = existingDonor.callCount;
+      lastCalledDate = existingDonor.lastCalledDate;
+    };
+    donors.add(donorId, updatedDonor);
+  };
+
+  // New: Mark donor as not donated
+  public shared ({ caller }) func markDonorAsNotDonated(donorId : Nat) : async () {
+    let existingDonor = switch (donors.get(donorId)) {
+      case (null) { Runtime.trap("Donor not found") };
+      case (?donor) { donor };
+    };
+
+    let updatedDonor : Donor = {
+      id = existingDonor.id;
+      name = existingDonor.name;
+      bloodGroup = existingDonor.bloodGroup;
+      phoneNumber = existingDonor.phoneNumber;
+      status = #active;
+      callCount = existingDonor.callCount;
+      lastCalledDate = existingDonor.lastCalledDate;
+    };
+    donors.add(donorId, updatedDonor);
+  };
+
+  // New: Record a call to a donor
+  public shared ({ caller }) func recordCall(donorId : Nat) : async () {
+    let existingDonor = switch (donors.get(donorId)) {
+      case (null) { Runtime.trap("Donor not found") };
+      case (?donor) { donor };
+    };
+
+    let updatedDonor : Donor = {
+      id = existingDonor.id;
+      name = existingDonor.name;
+      bloodGroup = existingDonor.bloodGroup;
+      phoneNumber = existingDonor.phoneNumber;
+      status = existingDonor.status;
+      callCount = existingDonor.callCount + 1;
+      lastCalledDate = ?Time.now();
+    };
+    donors.add(donorId, updatedDonor);
   };
 
   public query ({ caller }) func getAllDonors() : async [Donor] {
@@ -117,13 +223,10 @@ actor {
     filtered.toArray();
   };
 
-  public query ({ caller }) func getDonor(id : Nat) : async {
-    #ok : Donor;
-    #error : Text;
-  } {
+  public query ({ caller }) func getDonor(id : Nat) : async Donor {
     switch (donors.get(id)) {
-      case (null) { #error("Donor not found") };
-      case (?donor) { #ok(donor) };
+      case (null) { Runtime.trap("Donor not found") };
+      case (?donor) { donor };
     };
   };
 
@@ -163,3 +266,4 @@ actor {
     permRejectedDonors.toArray();
   };
 };
+

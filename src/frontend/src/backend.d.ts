@@ -29,8 +29,10 @@ export interface Donor {
     id: bigint;
     status: DonorStatus;
     name: string;
+    lastCalledDate?: bigint;
     bloodGroup: BloodGroup;
     phoneNumber: string;
+    callCount: bigint;
 }
 export type Time = bigint;
 export enum BloodGroup {
@@ -44,30 +46,17 @@ export enum BloodGroup {
     O_pos = "O_pos"
 }
 export interface backendInterface {
-    addDonor(name: string, bloodGroup: BloodGroup, phoneNumber: string): Promise<{
-        __kind__: "ok";
-        ok: bigint;
-    } | {
-        __kind__: "error";
-        error: string;
-    }>;
+    addDonor(name: string, bloodGroup: BloodGroup, phoneNumber: string): Promise<bigint>;
+    deleteDonor(id: bigint): Promise<void>;
+    editDonor(id: bigint, newName: string, newBloodGroup: BloodGroup, newPhoneNumber: string): Promise<void>;
     getAllAppointedDonors(): Promise<Array<Donor>>;
     getAllDonors(): Promise<Array<Donor>>;
     getAllPermanentlyRejectedDonors(): Promise<Array<Donor>>;
     getAllTempRejectedDonors(): Promise<Array<Donor>>;
-    getDonor(id: bigint): Promise<{
-        __kind__: "ok";
-        ok: Donor;
-    } | {
-        __kind__: "error";
-        error: string;
-    }>;
+    getDonor(id: bigint): Promise<Donor>;
     getDonorsByBloodGroup(bloodGroup: BloodGroup): Promise<Array<Donor>>;
-    updateDonorStatus(donorId: bigint, newStatus: DonorStatus): Promise<{
-        __kind__: "ok";
-        ok: null;
-    } | {
-        __kind__: "error";
-        error: string;
-    }>;
+    markDonorAsDonated(donorId: bigint): Promise<void>;
+    markDonorAsNotDonated(donorId: bigint): Promise<void>;
+    recordCall(donorId: bigint): Promise<void>;
+    updateDonorStatus(donorId: bigint, newStatus: DonorStatus): Promise<void>;
 }

@@ -1,60 +1,67 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-20T12:13:47.346Z",
+  "generatedAt": "2026-02-22T01:26:57.997Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 2,
+    "total": 4,
+    "implemented": 4,
     "items": [
       {
-        "id": "REQ-16",
-        "summary": "Debug and fix the error occurring in the Add Donor section that prevents donors from being added successfully",
+        "id": "REQ-34",
+        "summary": "Refactor frontend/src/pages/HomePage.tsx to display a navigation menu or list of section links/buttons instead of rendering all donor sections inline on the homepage",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/AddDonorDialog.tsx",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/pages/HomePage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/AddDonorDialog.tsx",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/pages/HomePage.tsx"
         ]
       },
       {
-        "id": "REQ-17",
-        "summary": "Verify that the addDonor mutation in useQueries.ts correctly handles the backend response and updates the UI state",
+        "id": "REQ-35",
+        "summary": "Implement section navigation state management in HomePage.tsx that tracks which section is currently active and displays only that section's content when clicked",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/pages/HomePage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/pages/HomePage.tsx"
         ]
       },
       {
-        "id": "REQ-18",
-        "summary": "Ensure the backend addDonor function in main.mo properly validates input and returns appropriate success/error responses",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
+        "id": "REQ-36",
+        "summary": "Add a back or home button that returns the user from a section detail view to the main section navigation menu",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/HomePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/HomePage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-37",
+        "summary": "Preserve the Add Donor functionality and make it accessible from either the section navigation menu or the Total Donor List section view",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/HomePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/HomePage.tsx"
+        ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/AddDonorDialog.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/HomePage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

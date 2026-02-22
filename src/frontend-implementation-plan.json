@@ -1,46 +1,69 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix Add Donor Section Error",
+  "title": "Convert homepage to navigation-based layout with separate section views",
   "requirements": [
     {
-      "id": "REQ-16",
-      "summary": "Debug and fix the error occurring in the Add Donor section that prevents donors from being added successfully",
+      "id": "REQ-34",
+      "summary": "Refactor HomePage.tsx to display a navigation menu with section links instead of rendering all donor sections inline",
       "acceptanceCriteria": [
-        "The Add Donor dialog opens without errors",
-        "All form fields (name, blood group, phone number) accept input correctly",
-        "Form validation works properly for required fields and phone number format",
-        "Submitting the form successfully adds a donor to the backend",
-        "Success toast notification appears after successful donor addition",
-        "Error messages display appropriately for validation failures",
-        "The donor list refreshes automatically to show the newly added donor"
+        "Homepage displays clickable section links or buttons for: Total Donor List, Blood Requirement, Appointed Donors, Temporary Rejected Donors, and Permanent Rejected Donors",
+        "No donor tables or section details are visible on the initial homepage load",
+        "Each section link is clearly labeled and styled consistently with the medical theme"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AddDonorDialog.tsx",
+          "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "Fix form submission handling to properly await the addDonor mutation, ensure correct BloodGroup enum value mapping from dropdown selection to backend interface format, add error boundary handling for dialog open state, validate phone number format before submission, and ensure proper form reset after successful submission"
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Fix the addDonor mutation to properly handle the backend result type which returns an object with __kind__ discriminator ('ok' or 'error'), ensure proper error extraction from the error variant, verify query invalidation triggers correctly after successful mutation, and add proper TypeScript typing for the mutation result"
+          "description": "Replace the current inline section rendering with a navigation menu layout. Remove all section components from the initial render and create a grid or list of clickable section cards/buttons (Total Donor List, Blood Requirement, Appointed Donors, Temporary Rejected Donors, Permanent Rejected Donors). Style the navigation menu using the medical-themed color palette from Tailwind config. Ensure the Add Donor button remains accessible in the navigation view."
         }
       ]
     },
     {
-      "id": "REQ-17",
-      "summary": "Verify that the addDonor mutation in useQueries.ts correctly handles the backend response and updates the UI state",
+      "id": "REQ-35",
+      "summary": "Implement section navigation state management that tracks the active section and displays only its content",
       "acceptanceCriteria": [
-        "The addDonor mutation properly awaits the backend call",
-        "Query invalidation triggers after successful donor addition",
-        "Error handling captures and displays backend errors appropriately"
+        "Clicking a section link/button reveals that section's full content (donors table, forms, etc.)",
+        "Only one section's details are visible at a time",
+        "User can navigate back to the section menu or switch between sections without page reload"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "Ensure the addDonor mutation properly checks the __kind__ discriminator on the backend result, throws an error when __kind__ is 'error' to trigger the mutation's onError callback, invalidates the 'donors' query key on success to refresh the donor list, and properly types the mutation parameters and return value"
+          "description": "Add React state to track the currently active section (using useState with null or a section identifier). Implement conditional rendering logic that shows the navigation menu when no section is active, and displays the appropriate section component (DonorTable, BloodRequirementForm, AppointedDonorsList, TempRejectedDonorsList, or PermanentRejectedDonorsList) when a section is selected. Wire section buttons to update the active section state on click."
+        }
+      ]
+    },
+    {
+      "id": "REQ-36",
+      "summary": "Add a back button that returns the user from section detail view to the main navigation menu",
+      "acceptanceCriteria": [
+        "A clearly visible back/home button is present when viewing any section detail",
+        "Clicking the button returns to the section navigation menu",
+        "The navigation state resets so no section details are visible after returning"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Add a back/home button component that appears when a section is active (conditional rendering based on active section state). Position the button prominently at the top of the section detail view. Wire the button's onClick handler to reset the active section state to null, returning the user to the navigation menu. Style the button consistently with the medical theme using existing UI components or Tailwind classes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-37",
+      "summary": "Preserve Add Donor functionality and make it accessible from the section navigation menu or Total Donor List view",
+      "acceptanceCriteria": [
+        "Add Donor button remains functional and accessible",
+        "AddDonorDialog continues to work as currently implemented",
+        "After adding a donor, user can see the updated list in the Total Donor List section"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Ensure the Add Donor button and AddDonorDialog remain accessible. Position the Add Donor button in the navigation menu view or make it visible when the Total Donor List section is active. Verify that the existing AddDonorDialog component and useAddDonor mutation hook continue to work without modification. After successful donor addition, ensure the user can navigate to or remains in the Total Donor List section to see the updated donor list."
         }
       ]
     }

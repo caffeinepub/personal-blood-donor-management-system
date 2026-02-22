@@ -1,18 +1,21 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
-  "summary": "Personal Blood Donor Management System - A single-user website for managing blood donor data with admin-only access, donor list management, blood group filtering, call workflow with approval/rejection tracking, and automated donor status management",
+  "projectStateVersion": 13,
+  "summary": "Personal Blood Donor Management System - A single-user website for managing blood donor data with admin-only access, donor list management with edit/delete capabilities, blood group filtering, call workflow with approval/rejection tracking, automated donor status management, donation tracking with 3-month cooldown periods, and rejection reason capture",
   "architectural_notes": [
     "Single-user system with admin-only access, no public registration",
     "Time-based auto-restoration logic for temporary rejected donors",
     "Donor status state machine: Total → (Approved/Temp Rejected/Perm Rejected)",
     "Blood group filtering supports 7 types plus 'Any Type' option",
-    "Call button now opens native phone dialer app using tel: protocol instead of clipboard-only"
+    "Call button now opens native phone dialer app using tel: protocol instead of clipboard-only",
+    "Donation tracking with 3-month cooldown: donated donors move to temporary rejected status and auto-restore after 3 months",
+    "Rejection reasons captured as free-text input for both temporary and permanent rejections",
+    "Admin can edit/delete donor records after creation",
+    "Donor call tracking: Call Count (number) and Last Called Date (timestamp) fields track contact history",
+    "Donor list sorting: Primary sort by Last Called Date (oldest first), secondary sort by Call Count (lowest first)"
   ],
-  "known_issues": [
-    "Error occurring in add donor section"
-  ],
-  "isFixRequest": true,
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-implement-single-user-admin-authentication-using-internet-identity-with-no-public-registration-capability",
@@ -133,6 +136,134 @@
         "REQ-17"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-edit-functionality-to-the-total-donor-list-allowing-admin-to-modify-donor-details-name-blood-group-phone-number-after-the-donor-has-been-added",
+      "title": "Add edit functionality to the Total Donor List allowing admin to modify donor details (name, blood group, phone number) after the donor has been added",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-delete-functionality-to-the-total-donor-list-allowing-admin-to-permanently-remove-donor-records",
+      "title": "Add delete functionality to the Total Donor List allowing admin to permanently remove donor records",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-donated-button-to-each-row-in-the-appointed-donors-section-that-moves-the-donor-to-temporary-rejected-status-with-a-3-month-cooldown-period",
+      "title": "Add 'Donated' button to each row in the Appointed Donors section that moves the donor to Temporary Rejected status with a 3-month cooldown period",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-not-donated-button-to-each-row-in-the-appointed-donors-section-that-immediately-returns-the-donor-to-active-status-in-the-total-donor-list",
+      "title": "Add 'Not Donated' button to each row in the Appointed Donors section that immediately returns the donor to active status in the Total Donor List",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-a-visual-indicator-in-the-temporary-rejected-donors-section-showing-which-donors-were-marked-as-donated-versus-those-who-were-temporarily-rejected-for-other-reasons",
+      "title": "Display a visual indicator in the Temporary Rejected Donors section showing which donors were marked as 'donated' versus those who were temporarily rejected for other reasons",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-text-input-field-labeled-rejected-reason-type-by-own-to-the-temporary-rejected-option-in-the-post-call-response-form",
+      "title": "Add a text input field labeled 'Rejected Reason (type by own)' to the Temporary Rejected option in the post-call response form",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-text-input-field-labeled-rejected-reason-type-by-own-to-the-permanent-rejected-option-in-the-post-call-response-form",
+      "title": "Add a text input field labeled 'Rejected Reason (type by own)' to the Permanent Rejected option in the post-call response form",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-recordcall-mutation-hook-in-frontend-src-hooks-usequeries-ts-that-calls-the-backend-recordcall-function-and-invalidates-all-donor-queries-on-success",
+      "title": "Add a 'recordCall' mutation hook in frontend/src/hooks/useQueries.ts that calls the backend recordCall function and invalidates all donor queries on success",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-the-call-button-in-frontend-src-components-donortable-tsx-to-invoke-the-recordcall-mutation-before-opening-the-phone-dialer",
+      "title": "Modify the Call button in frontend/src/components/DonorTable.tsx to invoke the recordCall mutation before opening the phone dialer",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-the-call-button-in-frontend-src-components-bloodrequirementform-tsx-to-invoke-the-recordcall-mutation-before-opening-the-phone-dialer",
+      "title": "Modify the Call button in frontend/src/components/BloodRequirementForm.tsx to invoke the recordCall mutation before opening the phone dialer",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-client-side-sorting-logic-in-frontend-src-components-appointeddonorslist-tsx-that-sorts-donors-by-lastcalleddate-ascending-nulls-first-with-secondary-sort-by-callcount-ascending-when-lastcalleddate-values-match",
+      "title": "Implement client-side sorting logic in frontend/src/components/AppointedDonorsList.tsx that sorts donors by lastCalledDate ascending (nulls first), with secondary sort by callCount ascending when lastCalledDate values match",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-callcount-value-in-the-appointeddonorslist-table-as-a-new-column-labeled-calls-showing-the-number-of-times-each-donor-has-been-contacted",
+      "title": "Display the callCount value in the AppointedDonorsList table as a new column labeled 'Calls' showing the number of times each donor has been contacted",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-refactor-frontend-src-pages-homepage-tsx-to-display-a-navigation-menu-or-list-of-section-links-buttons-instead-of-rendering-all-donor-sections-inline-on-the-homepage",
+      "title": "Refactor frontend/src/pages/HomePage.tsx to display a navigation menu or list of section links/buttons instead of rendering all donor sections inline on the homepage",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-section-navigation-state-management-in-homepage-tsx-that-tracks-which-section-is-currently-active-and-displays-only-that-section-s-content-when-clicked",
+      "title": "Implement section navigation state management in HomePage.tsx that tracks which section is currently active and displays only that section's content when clicked",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-back-or-home-button-that-returns-the-user-from-a-section-detail-view-to-the-main-section-navigation-menu",
+      "title": "Add a back or home button that returns the user from a section detail view to the main section navigation menu",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-preserve-the-add-donor-functionality-and-make-it-accessible-from-either-the-section-navigation-menu-or-the-total-donor-list-section-view",
+      "title": "Preserve the Add Donor functionality and make it accessible from either the section navigation menu or the Total Donor List section view",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -224,6 +355,102 @@
       "reqIds": [
         "REQ-18"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Add edit and delete functionality for donor records after admin adds them",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Add 'Donated' and 'Not Donated' buttons in Appointed Donors section",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Implement 'Donated' workflow: move donor to Temporary Rejected section with 3-month cooldown, mark as donated, auto-restore to active after 3 months",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Implement 'Not Donated' workflow: automatically return donor to active status in Total Donor List",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Add 'Rejected Reason (type by own)' text input field to Temporary Rejected form in post-call workflow",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Add 'Rejected Reason (type by own)' text input field to Permanent Rejected form in post-call workflow",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Add 'Call Count' field to donor model to track total number of times each donor has been contacted",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Add 'Last Called Date' field to donor model to track when each donor was last contacted",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Automatically increment Call Count and update Last Called Date when admin clicks the Call button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Sort donors in all sections by Last Called Date (ascending) with secondary sort by Call Count (ascending) when dates match",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Auto-refresh donor list immediately after Call button is clicked to reflect updated sort order",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Add a 'callCount' field (Int) to the Donor type in backend/main.mo to track the total number of times each donor has been contacted",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Add a 'lastCalledDate' field (optional Int timestamp) to the Donor type in backend/main.mo to track when each donor was last contacted",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Create a backend function in main.mo called 'recordCall' that accepts a donor ID, increments the donor's callCount by 1, and updates the lastCalledDate to the current timestamp (Time.now())",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Refactor homepage to show section links/buttons instead of inline content. Only display section details (Total Donor List, Appointed Donors, Temporary Rejected, Permanent Rejected) after the user clicks on a section link",
+      "reqIds": [],
       "status": "pending"
     }
   ],

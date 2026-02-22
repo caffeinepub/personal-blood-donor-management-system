@@ -1,13 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the error occurring in the Add Donor section to enable successful donor addition.
+**Goal:** Convert the homepage from displaying all donor sections inline to a navigation-based layout where sections are accessed individually through clickable links.
 
 **Planned changes:**
-- Debug and resolve errors preventing the Add Donor dialog from functioning properly
-- Fix form submission and validation issues in the Add Donor form
-- Ensure the addDonor mutation correctly handles backend responses and updates the UI
-- Verify backend addDonor function properly validates input and returns appropriate responses
-- Ensure newly added donors appear in the donor list after successful addition
+- Replace inline donor sections on homepage with a navigation menu showing section links/buttons
+- Implement section navigation state to display only the selected section's content when clicked
+- Add a back/home button to return from section details to the main navigation menu
+- Preserve Add Donor functionality and make it accessible from the section menu or Total Donor List view
 
-**User-visible outcome:** Users can successfully open the Add Donor dialog, fill in donor information (name, blood group, phone number), submit the form without errors, see a success notification, and view the newly added donor in the donor list.
+**User-visible outcome:** Users will see a clean homepage with section navigation buttons. After clicking a section (Total Donor List, Blood Requirement, Appointed Donors, Temporary Rejected Donors, or Permanent Rejected Donors), only that section's details appear. A back button allows returning to the section menu.

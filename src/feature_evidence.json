@@ -2,11 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-debug-and-fix-the-error-occurring-in-the-add-donor-section-that-prevents-donors-from-being-added-successfully",
-      "featureTitle": "Debug and fix the error occurring in the Add Donor section that prevents donors from being added successfully",
+      "featureId": "feature-refactor-frontend-src-pages-homepage-tsx-to-display-a-navigation-menu-or-list-of-section-links-buttons-instead-of-rendering-all-donor-sections-inline-on-the-homepage",
+      "featureTitle": "Refactor frontend/src/pages/HomePage.tsx to display a navigation menu or list of section links/buttons instead of rendering all donor sections inline on the homepage",
       "files": [
-        "frontend/src/components/AddDonorDialog.tsx",
-        "frontend/src/hooks/useQueries.ts"
+        "frontend/src/pages/HomePage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -16,15 +15,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-16"
+        "REQ-34"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-verify-that-the-adddonor-mutation-in-usequeries-ts-correctly-handles-the-backend-response-and-updates-the-ui-state",
-      "featureTitle": "Verify that the addDonor mutation in useQueries.ts correctly handles the backend response and updates the UI state",
+      "featureId": "feature-implement-section-navigation-state-management-in-homepage-tsx-that-tracks-which-section-is-currently-active-and-displays-only-that-section-s-content-when-clicked",
+      "featureTitle": "Implement section navigation state management in HomePage.tsx that tracks which section is currently active and displays only that section's content when clicked",
       "files": [
-        "frontend/src/hooks/useQueries.ts"
+        "frontend/src/pages/HomePage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -34,7 +33,43 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-17"
+        "REQ-35"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-back-or-home-button-that-returns-the-user-from-a-section-detail-view-to-the-main-section-navigation-menu",
+      "featureTitle": "Add a back or home button that returns the user from a section detail view to the main section navigation menu",
+      "files": [
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-36"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-preserve-the-add-donor-functionality-and-make-it-accessible-from-either-the-section-navigation-menu-or-the-total-donor-list-section-view",
+      "featureTitle": "Preserve the Add Donor functionality and make it accessible from either the section navigation menu or the Total Donor List section view",
+      "files": [
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-37"
       ],
       "confidence": "high"
     }

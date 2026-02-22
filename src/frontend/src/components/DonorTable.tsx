@@ -1,24 +1,39 @@
 import { useState } from 'react';
-import { useGetAllDonors } from '../hooks/useQueries';
+import { useGetAllDonors, useRecordCall } from '../hooks/useQueries';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Phone, Loader2 } from 'lucide-react';
+import { Phone, Loader2, Pencil, Trash2 } from 'lucide-react';
 import PostCallForm from './PostCallForm';
+import EditDonorDialog from './EditDonorDialog';
+import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import type { Donor } from '../backend';
 
 export default function DonorTable() {
   const { data: donors, isLoading } = useGetAllDonors();
+  const { mutate: recordCall, isPending: isRecordingCall } = useRecordCall();
   const [selectedDonor, setSelectedDonor] = useState<Donor | null>(null);
   const [isPostCallFormOpen, setIsPostCallFormOpen] = useState(false);
+  const [editingDonor, setEditingDonor] = useState<Donor | null>(null);
+  const [deletingDonor, setDeletingDonor] = useState<Donor | null>(null);
+  const [callingDonorId, setCallingDonorId] = useState<bigint | null>(null);
 
   const handleCall = (donor: Donor) => {
-    // Open native phone dialer
-    window.location.href = `tel:${donor.phoneNumber}`;
-    
-    // Open post-call form
-    setSelectedDonor(donor);
-    setIsPostCallFormOpen(true);
+    setCallingDonorId(donor.id);
+    recordCall(donor.id, {
+      onSuccess: () => {
+        // Open native phone dialer after recording the call
+        window.location.href = `tel:${donor.phoneNumber}`;
+        
+        // Open post-call form
+        setSelectedDonor(donor);
+        setIsPostCallFormOpen(true);
+        setCallingDonorId(null);
+      },
+      onError: () => {
+        setCallingDonorId(null);
+      },
+    });
   };
 
   const getBloodGroupLabel = (bloodGroup: string): string => {
@@ -77,7 +92,7 @@ export default function DonorTable() {
               <TableHead className="font-semibold text-gray-900">Blood Group</TableHead>
               <TableHead className="font-semibold text-gray-900">Phone Number</TableHead>
               <TableHead className="font-semibold text-gray-900">Status</TableHead>
-              <TableHead className="font-semibold text-gray-900">Action</TableHead>
+              <TableHead className="font-semibold text-gray-900">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -92,14 +107,37 @@ export default function DonorTable() {
                 <TableCell className="font-mono text-sm">{donor.phoneNumber}</TableCell>
                 <TableCell>{getStatusBadge(donor.status)}</TableCell>
                 <TableCell>
-                  <Button
-                    onClick={() => handleCall(donor)}
-                    size="sm"
-                    className="bg-emerald-600 hover:bg-emerald-700"
-                  >
-                    <Phone className="mr-2 h-4 w-4" />
-                    Call
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onClick={() => handleCall(donor)}
+                      size="sm"
+                      className="bg-emerald-600 hover:bg-emerald-700"
+                      disabled={isRecordingCall && callingDonorId === donor.id}
+                    >
+                      {isRecordingCall && callingDonorId === donor.id ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Phone className="mr-2 h-4 w-4" />
+                      )}
+                      Call
+                    </Button>
+                    <Button
+                      onClick={() => setEditingDonor(donor)}
+                      size="sm"
+                      variant="outline"
+                      className="border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      onClick={() => setDeletingDonor(donor)}
+                      size="sm"
+                      variant="outline"
+                      className="border-red-300 text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -112,6 +150,22 @@ export default function DonorTable() {
           donor={selectedDonor}
           open={isPostCallFormOpen}
           onOpenChange={setIsPostCallFormOpen}
+        />
+      )}
+
+      {editingDonor && (
+        <EditDonorDialog
+          donor={editingDonor}
+          open={!!editingDonor}
+          onOpenChange={(open) => !open && setEditingDonor(null)}
+        />
+      )}
+
+      {deletingDonor && (
+        <DeleteConfirmationDialog
+          donor={deletingDonor}
+          open={!!deletingDonor}
+          onOpenChange={(open) => !open && setDeletingDonor(null)}
         />
       )}
     </>

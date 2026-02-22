@@ -111,8 +111,10 @@ export interface Donor {
     id: bigint;
     status: DonorStatus;
     name: string;
+    lastCalledDate?: bigint;
     bloodGroup: BloodGroup;
     phoneNumber: string;
+    callCount: bigint;
 }
 export type Time = bigint;
 export enum BloodGroup {
@@ -126,195 +128,243 @@ export enum BloodGroup {
     O_pos = "O_pos"
 }
 export interface backendInterface {
-    addDonor(name: string, bloodGroup: BloodGroup, phoneNumber: string): Promise<{
-        __kind__: "ok";
-        ok: bigint;
-    } | {
-        __kind__: "error";
-        error: string;
-    }>;
+    addDonor(name: string, bloodGroup: BloodGroup, phoneNumber: string): Promise<bigint>;
+    deleteDonor(id: bigint): Promise<void>;
+    editDonor(id: bigint, newName: string, newBloodGroup: BloodGroup, newPhoneNumber: string): Promise<void>;
     getAllAppointedDonors(): Promise<Array<Donor>>;
     getAllDonors(): Promise<Array<Donor>>;
     getAllPermanentlyRejectedDonors(): Promise<Array<Donor>>;
     getAllTempRejectedDonors(): Promise<Array<Donor>>;
-    getDonor(id: bigint): Promise<{
-        __kind__: "ok";
-        ok: Donor;
-    } | {
-        __kind__: "error";
-        error: string;
-    }>;
+    getDonor(id: bigint): Promise<Donor>;
     getDonorsByBloodGroup(bloodGroup: BloodGroup): Promise<Array<Donor>>;
-    updateDonorStatus(donorId: bigint, newStatus: DonorStatus): Promise<{
-        __kind__: "ok";
-        ok: null;
-    } | {
-        __kind__: "error";
-        error: string;
-    }>;
+    markDonorAsDonated(donorId: bigint): Promise<void>;
+    markDonorAsNotDonated(donorId: bigint): Promise<void>;
+    recordCall(donorId: bigint): Promise<void>;
+    updateDonorStatus(donorId: bigint, newStatus: DonorStatus): Promise<void>;
 }
 import type { BloodGroup as _BloodGroup, Donor as _Donor, DonorStatus as _DonorStatus, Time as _Time } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async addDonor(arg0: string, arg1: BloodGroup, arg2: string): Promise<{
-        __kind__: "ok";
-        ok: bigint;
-    } | {
-        __kind__: "error";
-        error: string;
-    }> {
+    async addDonor(arg0: string, arg1: BloodGroup, arg2: string): Promise<bigint> {
         if (this.processError) {
             try {
                 const result = await this.actor.addDonor(arg0, to_candid_BloodGroup_n1(this._uploadFile, this._downloadFile, arg1), arg2);
-                return from_candid_variant_n3(this._uploadFile, this._downloadFile, result);
+                return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.addDonor(arg0, to_candid_BloodGroup_n1(this._uploadFile, this._downloadFile, arg1), arg2);
-            return from_candid_variant_n3(this._uploadFile, this._downloadFile, result);
+            return result;
+        }
+    }
+    async deleteDonor(arg0: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteDonor(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteDonor(arg0);
+            return result;
+        }
+    }
+    async editDonor(arg0: bigint, arg1: string, arg2: BloodGroup, arg3: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.editDonor(arg0, arg1, to_candid_BloodGroup_n1(this._uploadFile, this._downloadFile, arg2), arg3);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.editDonor(arg0, arg1, to_candid_BloodGroup_n1(this._uploadFile, this._downloadFile, arg2), arg3);
+            return result;
         }
     }
     async getAllAppointedDonors(): Promise<Array<Donor>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getAllAppointedDonors();
-                return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getAllAppointedDonors();
-            return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async getAllDonors(): Promise<Array<Donor>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getAllDonors();
-                return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getAllDonors();
-            return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async getAllPermanentlyRejectedDonors(): Promise<Array<Donor>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getAllPermanentlyRejectedDonors();
-                return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getAllPermanentlyRejectedDonors();
-            return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async getAllTempRejectedDonors(): Promise<Array<Donor>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getAllTempRejectedDonors();
-                return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getAllTempRejectedDonors();
-            return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
-    async getDonor(arg0: bigint): Promise<{
-        __kind__: "ok";
-        ok: Donor;
-    } | {
-        __kind__: "error";
-        error: string;
-    }> {
+    async getDonor(arg0: bigint): Promise<Donor> {
         if (this.processError) {
             try {
                 const result = await this.actor.getDonor(arg0);
-                return from_candid_variant_n11(this._uploadFile, this._downloadFile, result);
+                return from_candid_Donor_n4(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getDonor(arg0);
-            return from_candid_variant_n11(this._uploadFile, this._downloadFile, result);
+            return from_candid_Donor_n4(this._uploadFile, this._downloadFile, result);
         }
     }
     async getDonorsByBloodGroup(arg0: BloodGroup): Promise<Array<Donor>> {
         if (this.processError) {
             try {
                 const result = await this.actor.getDonorsByBloodGroup(to_candid_BloodGroup_n1(this._uploadFile, this._downloadFile, arg0));
-                return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getDonorsByBloodGroup(to_candid_BloodGroup_n1(this._uploadFile, this._downloadFile, arg0));
-            return from_candid_vec_n4(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
-    async updateDonorStatus(arg0: bigint, arg1: DonorStatus): Promise<{
-        __kind__: "ok";
-        ok: null;
-    } | {
-        __kind__: "error";
-        error: string;
-    }> {
+    async markDonorAsDonated(arg0: bigint): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.updateDonorStatus(arg0, to_candid_DonorStatus_n12(this._uploadFile, this._downloadFile, arg1));
-                return from_candid_variant_n14(this._uploadFile, this._downloadFile, result);
+                const result = await this.actor.markDonorAsDonated(arg0);
+                return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.updateDonorStatus(arg0, to_candid_DonorStatus_n12(this._uploadFile, this._downloadFile, arg1));
-            return from_candid_variant_n14(this._uploadFile, this._downloadFile, result);
+            const result = await this.actor.markDonorAsDonated(arg0);
+            return result;
+        }
+    }
+    async markDonorAsNotDonated(arg0: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.markDonorAsNotDonated(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.markDonorAsNotDonated(arg0);
+            return result;
+        }
+    }
+    async recordCall(arg0: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.recordCall(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.recordCall(arg0);
+            return result;
+        }
+    }
+    async updateDonorStatus(arg0: bigint, arg1: DonorStatus): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateDonorStatus(arg0, to_candid_DonorStatus_n11(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateDonorStatus(arg0, to_candid_DonorStatus_n11(this._uploadFile, this._downloadFile, arg1));
+            return result;
         }
     }
 }
 function from_candid_BloodGroup_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _BloodGroup): BloodGroup {
     return from_candid_variant_n10(_uploadFile, _downloadFile, value);
 }
-function from_candid_DonorStatus_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _DonorStatus): DonorStatus {
-    return from_candid_variant_n8(_uploadFile, _downloadFile, value);
+function from_candid_DonorStatus_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _DonorStatus): DonorStatus {
+    return from_candid_variant_n7(_uploadFile, _downloadFile, value);
 }
-function from_candid_Donor_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Donor): Donor {
-    return from_candid_record_n6(_uploadFile, _downloadFile, value);
+function from_candid_Donor_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Donor): Donor {
+    return from_candid_record_n5(_uploadFile, _downloadFile, value);
 }
-function from_candid_record_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_opt_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [bigint]): bigint | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     id: bigint;
     status: _DonorStatus;
     name: string;
+    lastCalledDate: [] | [bigint];
     bloodGroup: _BloodGroup;
     phoneNumber: string;
+    callCount: bigint;
 }): {
     id: bigint;
     status: DonorStatus;
     name: string;
+    lastCalledDate?: bigint;
     bloodGroup: BloodGroup;
     phoneNumber: string;
+    callCount: bigint;
 } {
     return {
         id: value.id,
-        status: from_candid_DonorStatus_n7(_uploadFile, _downloadFile, value.status),
+        status: from_candid_DonorStatus_n6(_uploadFile, _downloadFile, value.status),
         name: value.name,
+        lastCalledDate: record_opt_to_undefined(from_candid_opt_n8(_uploadFile, _downloadFile, value.lastCalledDate)),
         bloodGroup: from_candid_BloodGroup_n9(_uploadFile, _downloadFile, value.bloodGroup),
-        phoneNumber: value.phoneNumber
+        phoneNumber: value.phoneNumber,
+        callCount: value.callCount
     };
 }
 function from_candid_variant_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
@@ -336,64 +386,7 @@ function from_candid_variant_n10(_uploadFile: (file: ExternalBlob) => Promise<Ui
 }): BloodGroup {
     return "AB_neg" in value ? BloodGroup.AB_neg : "AB_pos" in value ? BloodGroup.AB_pos : "B_neg" in value ? BloodGroup.B_neg : "B_pos" in value ? BloodGroup.B_pos : "A_neg" in value ? BloodGroup.A_neg : "A_pos" in value ? BloodGroup.A_pos : "O_neg" in value ? BloodGroup.O_neg : "O_pos" in value ? BloodGroup.O_pos : value;
 }
-function from_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    ok: _Donor;
-} | {
-    error: string;
-}): {
-    __kind__: "ok";
-    ok: Donor;
-} | {
-    __kind__: "error";
-    error: string;
-} {
-    return "ok" in value ? {
-        __kind__: "ok",
-        ok: from_candid_Donor_n5(_uploadFile, _downloadFile, value.ok)
-    } : "error" in value ? {
-        __kind__: "error",
-        error: value.error
-    } : value;
-}
-function from_candid_variant_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    ok: null;
-} | {
-    error: string;
-}): {
-    __kind__: "ok";
-    ok: null;
-} | {
-    __kind__: "error";
-    error: string;
-} {
-    return "ok" in value ? {
-        __kind__: "ok",
-        ok: value.ok
-    } : "error" in value ? {
-        __kind__: "error",
-        error: value.error
-    } : value;
-}
-function from_candid_variant_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    ok: bigint;
-} | {
-    error: string;
-}): {
-    __kind__: "ok";
-    ok: bigint;
-} | {
-    __kind__: "error";
-    error: string;
-} {
-    return "ok" in value ? {
-        __kind__: "ok",
-        ok: value.ok
-    } : "error" in value ? {
-        __kind__: "error",
-        error: value.error
-    } : value;
-}
-function from_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_variant_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     active: null;
 } | {
     permanentlyRejected: null;
@@ -438,16 +431,16 @@ function from_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uin
         temporarilyRejected: value.temporarilyRejected
     } : value;
 }
-function from_candid_vec_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Donor>): Array<Donor> {
-    return value.map((x)=>from_candid_Donor_n5(_uploadFile, _downloadFile, x));
+function from_candid_vec_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Donor>): Array<Donor> {
+    return value.map((x)=>from_candid_Donor_n4(_uploadFile, _downloadFile, x));
 }
 function to_candid_BloodGroup_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: BloodGroup): _BloodGroup {
     return to_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function to_candid_DonorStatus_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: DonorStatus): _DonorStatus {
-    return to_candid_variant_n13(_uploadFile, _downloadFile, value);
+function to_candid_DonorStatus_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: DonorStatus): _DonorStatus {
+    return to_candid_variant_n12(_uploadFile, _downloadFile, value);
 }
-function to_candid_variant_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function to_candid_variant_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     __kind__: "active";
     active: null;
 } | {

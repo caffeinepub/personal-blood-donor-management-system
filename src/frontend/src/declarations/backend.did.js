@@ -32,31 +32,26 @@ export const Donor = IDL.Record({
   'id' : IDL.Nat,
   'status' : DonorStatus,
   'name' : IDL.Text,
+  'lastCalledDate' : IDL.Opt(IDL.Int),
   'bloodGroup' : BloodGroup,
   'phoneNumber' : IDL.Text,
+  'callCount' : IDL.Int,
 });
 
 export const idlService = IDL.Service({
-  'addDonor' : IDL.Func(
-      [IDL.Text, BloodGroup, IDL.Text],
-      [IDL.Variant({ 'ok' : IDL.Nat, 'error' : IDL.Text })],
-      [],
-    ),
+  'addDonor' : IDL.Func([IDL.Text, BloodGroup, IDL.Text], [IDL.Nat], []),
+  'deleteDonor' : IDL.Func([IDL.Nat], [], []),
+  'editDonor' : IDL.Func([IDL.Nat, IDL.Text, BloodGroup, IDL.Text], [], []),
   'getAllAppointedDonors' : IDL.Func([], [IDL.Vec(Donor)], ['query']),
   'getAllDonors' : IDL.Func([], [IDL.Vec(Donor)], ['query']),
   'getAllPermanentlyRejectedDonors' : IDL.Func([], [IDL.Vec(Donor)], ['query']),
   'getAllTempRejectedDonors' : IDL.Func([], [IDL.Vec(Donor)], ['query']),
-  'getDonor' : IDL.Func(
-      [IDL.Nat],
-      [IDL.Variant({ 'ok' : Donor, 'error' : IDL.Text })],
-      ['query'],
-    ),
+  'getDonor' : IDL.Func([IDL.Nat], [Donor], ['query']),
   'getDonorsByBloodGroup' : IDL.Func([BloodGroup], [IDL.Vec(Donor)], ['query']),
-  'updateDonorStatus' : IDL.Func(
-      [IDL.Nat, DonorStatus],
-      [IDL.Variant({ 'ok' : IDL.Null, 'error' : IDL.Text })],
-      [],
-    ),
+  'markDonorAsDonated' : IDL.Func([IDL.Nat], [], []),
+  'markDonorAsNotDonated' : IDL.Func([IDL.Nat], [], []),
+  'recordCall' : IDL.Func([IDL.Nat], [], []),
+  'updateDonorStatus' : IDL.Func([IDL.Nat, DonorStatus], [], []),
 });
 
 export const idlInitArgs = [];
@@ -86,16 +81,16 @@ export const idlFactory = ({ IDL }) => {
     'id' : IDL.Nat,
     'status' : DonorStatus,
     'name' : IDL.Text,
+    'lastCalledDate' : IDL.Opt(IDL.Int),
     'bloodGroup' : BloodGroup,
     'phoneNumber' : IDL.Text,
+    'callCount' : IDL.Int,
   });
   
   return IDL.Service({
-    'addDonor' : IDL.Func(
-        [IDL.Text, BloodGroup, IDL.Text],
-        [IDL.Variant({ 'ok' : IDL.Nat, 'error' : IDL.Text })],
-        [],
-      ),
+    'addDonor' : IDL.Func([IDL.Text, BloodGroup, IDL.Text], [IDL.Nat], []),
+    'deleteDonor' : IDL.Func([IDL.Nat], [], []),
+    'editDonor' : IDL.Func([IDL.Nat, IDL.Text, BloodGroup, IDL.Text], [], []),
     'getAllAppointedDonors' : IDL.Func([], [IDL.Vec(Donor)], ['query']),
     'getAllDonors' : IDL.Func([], [IDL.Vec(Donor)], ['query']),
     'getAllPermanentlyRejectedDonors' : IDL.Func(
@@ -104,21 +99,16 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getAllTempRejectedDonors' : IDL.Func([], [IDL.Vec(Donor)], ['query']),
-    'getDonor' : IDL.Func(
-        [IDL.Nat],
-        [IDL.Variant({ 'ok' : Donor, 'error' : IDL.Text })],
-        ['query'],
-      ),
+    'getDonor' : IDL.Func([IDL.Nat], [Donor], ['query']),
     'getDonorsByBloodGroup' : IDL.Func(
         [BloodGroup],
         [IDL.Vec(Donor)],
         ['query'],
       ),
-    'updateDonorStatus' : IDL.Func(
-        [IDL.Nat, DonorStatus],
-        [IDL.Variant({ 'ok' : IDL.Null, 'error' : IDL.Text })],
-        [],
-      ),
+    'markDonorAsDonated' : IDL.Func([IDL.Nat], [], []),
+    'markDonorAsNotDonated' : IDL.Func([IDL.Nat], [], []),
+    'recordCall' : IDL.Func([IDL.Nat], [], []),
+    'updateDonorStatus' : IDL.Func([IDL.Nat, DonorStatus], [], []),
   });
 };
 

@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from './ui/button';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { useUpdateDonorStatus } from '../hooks/useQueries';
 import { toast } from 'sonner';
@@ -24,6 +25,7 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
   const [appointmentDate, setAppointmentDate] = useState('');
   const [patientName, setPatientName] = useState('');
   const [availableDate, setAvailableDate] = useState('');
+  const [rejectionReason, setRejectionReason] = useState('');
 
   const { mutate: updateStatus, isPending } = useUpdateDonorStatus();
 
@@ -72,6 +74,11 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
           return;
         }
 
+        if (!rejectionReason.trim()) {
+          toast.error('Please enter a rejection reason');
+          return;
+        }
+
         const status: DonorStatus = {
           __kind__: 'temporarilyRejected',
           temporarilyRejected: {
@@ -84,7 +91,7 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
           {
             onSuccess: () => {
               toast.success('Donor temporarily rejected', {
-                description: `${donor.name} will be available after ${new Date(availableDate).toLocaleDateString()}`,
+                description: `${donor.name} will be available after ${new Date(availableDate).toLocaleDateString()}. Reason: ${rejectionReason}`,
               });
               onOpenChange(false);
               resetForm();
@@ -95,6 +102,11 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
           }
         );
       } else {
+        if (!rejectionReason.trim()) {
+          toast.error('Please enter a rejection reason');
+          return;
+        }
+
         const status: DonorStatus = {
           __kind__: 'permanentlyRejected',
           permanentlyRejected: null,
@@ -105,7 +117,7 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
           {
             onSuccess: () => {
               toast.success('Donor permanently rejected', {
-                description: `${donor.name} has been marked as permanently rejected`,
+                description: `${donor.name} has been marked as permanently rejected. Reason: ${rejectionReason}`,
               });
               onOpenChange(false);
               resetForm();
@@ -125,6 +137,7 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
     setAppointmentDate('');
     setPatientName('');
     setAvailableDate('');
+    setRejectionReason('');
   };
 
   return (
@@ -173,8 +186,7 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
                   type="date"
                   value={appointmentDate}
                   onChange={(e) => setAppointmentDate(e.target.value)}
-                  required
-                  className="border-blue-300"
+                  disabled={isPending}
                 />
               </div>
               <div className="space-y-2">
@@ -183,12 +195,10 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
                 </Label>
                 <Input
                   id="patientName"
-                  type="text"
                   value={patientName}
                   onChange={(e) => setPatientName(e.target.value)}
                   placeholder="Enter patient name"
-                  required
-                  className="border-blue-300"
+                  disabled={isPending}
                 />
               </div>
             </div>
@@ -198,7 +208,10 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
             <div className="space-y-4 rounded-lg border border-amber-200 bg-amber-50/50 p-4">
               <div className="space-y-4">
                 <Label>Rejection Type</Label>
-                <RadioGroup value={rejectionType} onValueChange={(value) => setRejectionType(value as RejectionType)}>
+                <RadioGroup
+                  value={rejectionType}
+                  onValueChange={(value) => setRejectionType(value as RejectionType)}
+                >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="temporary" id="temporary" />
                     <Label htmlFor="temporary" className="font-normal">
@@ -224,19 +237,28 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
                     type="date"
                     value={availableDate}
                     onChange={(e) => setAvailableDate(e.target.value)}
-                    required
-                    className="border-amber-300"
+                    disabled={isPending}
                   />
                 </div>
               )}
-            </div>
-          )}
 
-          {responseType === 'notAttend' && (
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-              <p className="text-sm text-muted-foreground">
-                No changes will be made to the donor's status.
-              </p>
+              <div className="space-y-2">
+                <Label htmlFor="rejectionReason">
+                  Rejected Reason (type by own) <span className="text-red-500">*</span>
+                </Label>
+                <Textarea
+                  id="rejectionReason"
+                  value={rejectionReason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
+                  placeholder="Enter the reason for rejection..."
+                  disabled={isPending}
+                  rows={3}
+                  maxLength={500}
+                />
+                <p className="text-xs text-muted-foreground">
+                  {rejectionReason.length}/500 characters
+                </p>
+              </div>
             </div>
           )}
 
@@ -254,17 +276,11 @@ export default function PostCallForm({ donor, open, onOpenChange }: PostCallForm
             </Button>
             <Button
               type="submit"
-              disabled={isPending}
               className="bg-emerald-600 hover:bg-emerald-700"
+              disabled={isPending}
             >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                'Submit'
-              )}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Submit
             </Button>
           </DialogFooter>
         </form>
